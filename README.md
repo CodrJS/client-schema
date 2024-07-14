@@ -1,7 +1,6 @@
 # Codr Schema Client
 
-[![CodeQL](https://github.com/CodrJS/client-schema/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/CodrJS/client-schema/actions/workflows/codeql.yml)
-[![Docker Image CI](https://github.com/CodrJS/client-schema/actions/workflows/docker-image.yml/badge.svg)](https://github.com/CodrJS/client-schema/actions/workflows/docker-image.yml)
+[![Docker Image CI](https://github.com/CodrJS/client-schema/actions/workflows/docker-image.yaml/badge.svg)](https://github.com/CodrJS/client-schema/actions/workflows/docker-image.yaml)
 
 ## Purpose
 
@@ -23,7 +22,7 @@ Finally, try to keep the schemas organized, creating new directories when necess
 
 ### Prerequisites
 
-```bash
+```sh
 # Clone the repo
 git clone git@github.com:CodrJS/client-schema.git
 
@@ -31,5 +30,5 @@ git clone git@github.com:CodrJS/client-schema.git
 docker build -t codr-client-schema .
 
 # Run the server locally
-docker run client-schema codr-client-schema -p 80:80
+docker run --name client-schema -p 80:80 codr-client-schema
 ```
