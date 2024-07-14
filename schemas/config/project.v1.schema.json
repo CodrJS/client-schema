@@ -1,0 +1,146 @@
+{
+  "$id": "https://schema.codr.sh/config/project.v1.schema.json",
+  "title": "Project Config",
+  "description": "A Codr annotation project configuration.",
+  "type": "object",
+  "properties": {
+    "general": {
+      "description": "General configuration for the project.",
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "The title of the project"
+        },
+        "type": {
+          "enum": ["classification", "labeling", "translation"],
+          "description": "Type of annotation task the project is to perform"
+        },
+        "slug": {
+          "type": "string",
+          "description": "The URL slug for the project"
+        },
+        "bgColorClass": {
+          "type": "string",
+          "description": "The background color class for the project. Please use [Tailwind CSS class names](https://tailwindcss.com/docs/background-color)"
+        },
+        "guidelines": {
+          "type": "string",
+          "description": "The guidelines for the project"
+        },
+        "anonymize": {
+          "type": "boolean",
+          "description": "When exporting, do you want to automatically remove all user-referenced data from the annotations?",
+          "default": false
+        }
+      },
+      "required": ["title", "type", "guidelines"]
+    },
+    "display": {
+      "description": "User interface configuration for the project.",
+      "type": "object",
+      "properties": {
+        "inputs": {
+          "type": "array",
+          "description": "The data from your samples to display to the annotators",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "enum": ["text"],
+                "description": "Type of data to be displayed."
+              },
+              "value": {
+                "type": "string",
+                "pattern": "^(\\$sample(.[\\w*[\\]]+)*)$",
+                "description": "Location of the data in the sample to use in the formatted string."
+              },
+              "format": {
+                "type": "string",
+                "description": "Text to display; can include data from value using $value dot notation."
+              },
+              "collapsible": {
+                "type": "boolean",
+                "description": "Whether or not to display the input in a collapsible UI component."
+              },
+              "header": {
+                "type": "string",
+                "description": "Header for collapsible object, $index dot notation supported."
+              }
+            },
+            "required": ["type"],
+            "minItems": 1,
+            "exclusiveMinimum": 1
+          }
+        },
+        "outputs": {
+          "type": "array",
+          "description": "The types of inputs to show the user to collect annotations.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "enum": [
+                  "short-text",
+                  "long-text",
+                  "range",
+                  "radio",
+                  "multiple-choice"
+                ],
+                "description": "The type of output expected from the user."
+              },
+              "prompt": {
+                "type": "string",
+                "description": "Prompt for output item; `$sample` dot-notation available, Markdown support."
+              },
+              "range": {
+                "type": "array",
+                "items": { "type": "integer" },
+                "minItems": 2,
+                "maxItems": 2,
+                "description": "If type is range, then a 2-tuple is expected; [min, max]",
+                "default": [1, 10]
+              },
+              "options": {
+                "type": ["string", "array"],
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "key": { "type": "string" },
+                    "value": { "type": "string" }
+                  }
+                },
+                "minItems": 2,
+                "pattern": "^(\\$sample(.[\\w*[\\]]+)*)$",
+                "description": "A location to options in the $sample, or, an array of key-value pairs.",
+                "default": [
+                  { "key": "prompt-1-opt-1", "value": "Option 1" },
+                  { "key": "prompt-1-opt-2", "value": "Option 2" }
+                ]
+              }
+            },
+            "required": ["type"],
+            "minItems": 1
+          }
+        }
+      },
+      "required": ["inputs", "outputs"]
+    },
+    "sample": {
+      "type": "object",
+      "properties": {
+        "skipValidation": {
+          "type": "boolean",
+          "description": "If true, dataset items being imported into Codr will skip model verification."
+        },
+        "model": {
+          "$ref": "https://json-schema.org/draft/2020-12/schema",
+          "description": "Project dataset sample format, used for data validation and referencing.",
+          "required": ["type"]
+        }
+      },
+      "required": ["model"]
+    }
+  },
+  "required": ["general", "display", "sample"]
+}

@@ -1,0 +1,40 @@
+{
+  "$id": "https://schema.codr.sh/identity/user.v1.schema.json",
+  "title": "User",
+  "type": "object",
+  "properties": {
+    "traits": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email",
+          "title": "Email address",
+          "ory.sh/kratos": {
+            "credentials": {
+              "code": {
+                "identifier": true,
+                "via": "email"
+              },
+              "webauthn": {
+                "identifier": true
+              },
+              "totp": {
+                "account_name": true
+              }
+            },
+            "recovery": {
+              "via": "email"
+            },
+            "verification": {
+              "via": "email"
+            }
+          },
+          "maxLength": 320
+        }
+      },
+      "required": ["email"],
+      "additionalProperties": false
+    }
+  }
+}
